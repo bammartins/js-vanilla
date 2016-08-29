@@ -1,0 +1,137 @@
+<html>
+	<title></title>
+	<head>
+		<style>
+			.iText{
+				display: block;
+				margin-bottom: 5px;
+				margin-top: 5px;
+			}
+		</style>
+		<script>
+		Routes = function(){
+			
+			function Routes(){
+					this.type,
+					this.state,
+					this.url,
+					this.template,
+					this.isModal,
+					this.routeIds = []; 				
+			}	
+
+			// Routes.prototype.setAttr = function(element, attributes){
+			// 	  for(var key in attributes) {
+			// 	    element.setAttribute(key, attributes[key]);
+			// 	  }
+			// }
+
+			Routes.prototype.AppendEl = function (parent, elements){
+				var labelNames = ['State', 'Url', 'Template'];
+				for (var i = 0; i < elements.length; i++) {
+					var el = document.createElement(elements[i]);
+					el.setAttribute('id', i+"-input");
+					el.setAttribute('class', "iText");
+					el.setAttribute('type', "text");
+					el.setAttribute('placeholder', labelNames[i]);
+					parent.appendChild(el);
+				}				
+			}
+
+			Routes.prototype.ValidateForm = function (){
+				var inputs 	= document.getElementsByClassName('iText');					
+				for (var i = 0; i < inputs.length; i++) {
+					if(inputs[i].value != ""){
+						this.routeIds.push(inputs[i].value);
+					}else{
+						console.log('preenche sapoha');
+						return;
+					}
+				}
+				return this.routeIds;
+			}
+			
+			Routes.prototype.BuildRoute = function(sType, sState, sUrl, sTemplate, bModal){				
+				var newRoute;
+				this.type = sType;
+				this.state = sState;
+				this.url = sUrl;
+				this.template = sTemplate;
+				this.isModal = bModal;
+
+				if (bModal === undefined) {
+					newRoute = ".state('"+this.type+"."+this.state+"', {\n 	url: '"+this.url+"',\n 	templateUrl: '"+this.template+"' \n})";					
+				}else{
+					newRoute = "tem modal";					
+				}
+				return newRoute;
+			}
+			return Routes;
+		}();
+			
+
+
+		window.onload = function(){
+			var newRoute = new Routes();
+			var state,
+				url,
+				template,
+				radios 		= document.forms["formRoute"].elements["type"],
+				finishRoute = document.getElementById('generateRoute'), 
+				radioValue,
+				radioButton    = document.getElementsByClassName('typeSegment');
+
+			for(radio in radios) {
+			    radios[radio].onclick = function(e) {
+					var	formRoute 	   = document.getElementById("formulario"),
+						buttonGenerate = document.getElementById('generateRoute');
+
+					for (var i = 0; i < radioButton.length; i++) {
+						if(radioButton[i].checked){
+							newRoute.AppendEl(formRoute, ['input','input','input']);
+							buttonGenerate.removeAttribute("disabled");							
+						}
+					}					
+			    }
+			}
+
+			finishRoute.onclick = function(e){
+				e.preventDefault();
+					var routeStep = newRoute.ValidateForm();
+
+					state    = routeStep[0];
+					url      = routeStep[1];
+					template = routeStep[2];	
+
+
+					for (var j = 0; j < radioButton.length; j++) {					
+						if(radioButton[j].checked){
+							radioValue = radioButton[j].value;
+						}
+					}
+
+					// document.createElement('p');
+
+					alert(newRoute.BuildRoute(radioValue, state, url, template));
+
+					document.querySelectorAll('input').value
+			}
+		}
+		</script>
+	</head>
+	<body>
+	<h1>Rotas</h1>
+		<form action="" name="formRoute" id="formulario">
+			<label for="type">Selecione o segmento</label><br>
+			<input type="radio" name="type" value="b2b" class="typeSegment">B2B<br>
+  			<input type="radio" name="type" value="b2c" class="typeSegment">B2C<br>
+  			<button id="generateRoute" disabled="true">Gerar Rota</button>
+		</form>
+	</body>
+</html>
+
+
+<!-- .state('b2b.home', {
+url: "",
+templateUrl: "/templates/pages/b2b/home.html"
+}) -->
