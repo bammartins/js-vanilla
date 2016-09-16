@@ -57,56 +57,60 @@ Routes = function(){
 			}
 			return Routes;
 		}();
+		
+function triggerEvent(){
+	var newRoute = new Routes();
+	var state,
+		url,
+		template,
+		radios 		= document.forms["formRoute"].elements["type"],
+		finishRoute = document.getElementById('generateRoute'), 
+		radioValue,
+		radioButton    = document.getElementsByClassName('typeSegment');
+
+	for(radio in radios) {
+	    radios[radio].onclick = function(e) {
+			var	formRoute 	   = document.getElementById("formulario"),
+				buttonGenerate = document.getElementById('generateRoute');
+
+			for (var i = 0; i < radioButton.length; i++) {
+				if(radioButton[i].checked){
+					newRoute.AppendEl(formRoute, ['input','input','input']);
+					buttonGenerate.removeAttribute("disabled");							
+				}
+			}					
+	    }
+	}
+
+	finishRoute.onclick = function(e){
+		e.preventDefault();
+			var routeStep   = newRoute.ValidateForm(),
+				routeDiv    = document.getElementById('routeScript'),
+				checkedBox  = document.getElementById('checkbox'),
+				script;
+
+			state    = routeStep[0];
+			url      = routeStep[1];
+			template = routeStep[2];	
+
+
+			for (var j = 0; j < radioButton.length; j++) {					
+				if(radioButton[j].checked){
+					radioValue = radioButton[j].value;
+				}
+			}
+
+			if (checkedBox.checked) {
+				script = newRoute.BuildRoute(radioValue, state, url, template, true);
+			}else{
+				script = newRoute.BuildRoute(radioValue, state, url, template);						
+			}
+			routeDiv.innerHTML = script;
+	}
+}
 			
 
 
-		window.onload = function(){
-			var newRoute = new Routes();
-			var state,
-				url,
-				template,
-				radios 		= document.forms["formRoute"].elements["type"],
-				finishRoute = document.getElementById('generateRoute'), 
-				radioValue,
-				radioButton    = document.getElementsByClassName('typeSegment');
-
-			for(radio in radios) {
-			    radios[radio].onclick = function(e) {
-					var	formRoute 	   = document.getElementById("formulario"),
-						buttonGenerate = document.getElementById('generateRoute');
-
-					for (var i = 0; i < radioButton.length; i++) {
-						if(radioButton[i].checked){
-							newRoute.AppendEl(formRoute, ['input','input','input']);
-							buttonGenerate.removeAttribute("disabled");							
-						}
-					}					
-			    }
-			}
-
-			finishRoute.onclick = function(e){
-				e.preventDefault();
-					var routeStep   = newRoute.ValidateForm(),
-						routeDiv    = document.getElementById('routeScript'),
-						checkedBox  = document.getElementById('checkbox'),
-						script;
-
-					state    = routeStep[0];
-					url      = routeStep[1];
-					template = routeStep[2];	
-
-
-					for (var j = 0; j < radioButton.length; j++) {					
-						if(radioButton[j].checked){
-							radioValue = radioButton[j].value;
-						}
-					}
-
-					if (checkedBox.checked) {
-						script = newRoute.BuildRoute(radioValue, state, url, template, true);
-					}else{
-						script = newRoute.BuildRoute(radioValue, state, url, template);						
-					}
-					routeDiv.innerHTML = script;
-			}
-		}
+window.onload = function(){
+	triggerEvent();
+}
