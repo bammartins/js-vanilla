@@ -11,18 +11,20 @@
 	<script src="script/routes.js"></script>
 	</head>
 	<body>
-	<h1>Rotas</h1>
-		<form action="" name="formRoute" id="formulario">
-			<label for="type">Selecione o segmento</label><br>
-			<input type="radio" name="type" value="b2b" class="typeSegment">B2B<br>
-  			<input type="radio" name="type" value="b2c" class="typeSegment">B2C<br>
-  			<label for="modal">Possui Modal</label>
-  			<input type="checkbox" name="modal" value="true" id="checkbox"><br>  			
-  			<button id="generateRoute" disabled="true">Gerar Rota</button>
-		</form>
+	<div class="wrapper">
+		<h1>Rotas</h1>
+			<form action="" name="formRoute" id="formulario">
+				<label for="type">Selecione o segmento</label><br>
+				<input type="radio" name="type" value="b2b" class="typeSegment">B2B<br>
+	  			<input type="radio" name="type" value="b2c" class="typeSegment">B2C<br>
+	  			<label for="modal">Possui Modal</label>
+	  			<input type="checkbox" name="modal" value="true" id="checkbox"><br>  			
+	  			<button id="generateRoute" disabled="true">Gerar Rota</button>
+			</form>
 
-	<div class="newRoute">
-		<p id="routeScript"></p>
+		<div class="newRoute">
+			<p id="routeScript"></p>
+		</div>		
 	</div>
 	</body>
 </html>
